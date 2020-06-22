@@ -16,6 +16,11 @@ class CreateTransactionService {
 
   public execute({ title, value, type }: Request): Transaction {
     const balance = this.transactionsRepository.getBalance();
+    const types = ['income', 'outcome'];
+
+    if (!types.includes(type)) {
+      throw new Error(`The ${type} is not valid!`);
+    }
 
     if (type === 'outcome' && value > balance.total) {
       throw new Error('The output cannot be greater than the balance');
